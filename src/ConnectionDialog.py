@@ -21,7 +21,7 @@ class ConnectionDialog(Dialog):
 
         # Initialize the dialog
         self.parent = parent
-        super().__init__(parent, title="Connect to database")
+        super().__init__(parent, title='Connect to database')
 
     def body(self, master):
         # Create body container
