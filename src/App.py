@@ -89,11 +89,17 @@ class App(tk.Tk):
         # Add data to the treeview if database is connected
         if dbState:
             # Add tables to the treeview
-            for table in self.db.getTables():
-                self.sidebarBody.insert('tables', tk.END, text=table, open=False)
+            for tableName in self.db.getTables():
+                self.sidebarBody.insert('tables', tk.END, text=tableName, iid=tableName, open=False)
+                # Add table columns to the treeview
+                for columnName, dataType, dataLength in self.db.getColumnData(tableName):
+                    self.sidebarBody.insert(tableName, tk.END, text=columnName, open=False)
             # Add views to the treeview
-            for view in self.db.getViews():
-                self.sidebarBody.insert('views', tk.END, text=view, open=False)
+            for viewName in self.db.getViews():
+                self.sidebarBody.insert('views', tk.END, text=viewName, iid=viewName, open=False)
+                # Add view columns to the treeview
+                for columnName, dataType, dataLength in self.db.getColumnData(viewName):
+                    self.sidebarBody.insert(viewName, tk.END, text=columnName, open=False)
 
     def showConnectionDialog(self):
         # Create a connection dialog and show it
@@ -104,12 +110,14 @@ class App(tk.Tk):
         try:
             # Connect to the database
             self.db.connect(host, port, sid, username, password)
-            # Update the UI
-            self.updateUI()
-            return True
-        # Handle errors
+        # Handle connection errors
         except Exception as e:
             return str(e)
+
+        # Update the UI
+        self.updateUI()
+
+        return True
 
     def disconnect(self):
         # Disconnect from the database if connected

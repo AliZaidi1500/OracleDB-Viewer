@@ -41,3 +41,8 @@ class OracleDatabase:
         # Get the view names
         self.cursor.execute('SELECT view_name FROM user_views')
         return [row[0] for row in self.cursor]
+    
+    def getColumnData(self, table):
+        # Get the table column names and data types
+        self.cursor.execute(f'SELECT column_name, data_type, data_length FROM user_tab_columns WHERE table_name = \'{table}\'')
+        return self.cursor.fetchall()
