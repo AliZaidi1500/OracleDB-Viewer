@@ -81,7 +81,7 @@ class ConnectionDialog(Dialog):
             self.sid.get(),
             self.username.get(),
             self.password.get())
-        
+
         # If connection was successful, destroy the dialog
         if dbStatus == True:
             showinfo('Connection Successful',
