@@ -1,8 +1,10 @@
 import tkinter as tk
 
-from OracleDatabase import OracleDatabase
-from ConnectionDialog import ConnectionDialog
+from MenuBar import MenuBar
 from Sidebar import Sidebar
+from ConnectionDialog import ConnectionDialog
+
+from OracleDatabase import OracleDatabase
 
 class App(tk.Tk):
 
@@ -25,18 +27,9 @@ class App(tk.Tk):
         self.geometry('800x600')
 
         # Create the menu bar
-        menuBar = tk.Menu(self)
-
-        # Create the database menu and add entries
-        self.databaseMenu = tk.Menu(menuBar, tearoff=0)
-        self.databaseMenu.add_command(label='Connect', command=self.showConnectionDialog)
-        self.databaseMenu.add_command(label='Disconnect', command=self.disconnect)
-        self.databaseMenu.add_separator()
-        self.databaseMenu.add_command(label='Exit', command=self.destroy)
-
-        # Add database menu to menu bar
-        menuBar.add_cascade(label='Database', menu=self.databaseMenu)
-        self.config(menu=menuBar)
+        self.menuBar = MenuBar(self)
+        # Add menu bar to the main window
+        self.config(menu=self.menuBar)
 
     def initializeSidebar(self):
         # Create the sidebar
@@ -46,15 +39,10 @@ class App(tk.Tk):
     def updateUI(self, dbState=None):
         if dbState is None:
             dbState = self.db.isConnected
-        # Update the database menu
-        self.updateDatabaseMenuItems(dbState)
+        # Update the menu items
+        self.menuBar.updateMenuItems(dbState)
         # Update the sidebar
         self.sidebar.update(dbState)
-
-    def updateDatabaseMenuItems(self, dbState):
-        # Update the menu items
-        self.databaseMenu.entryconfig(0, state=tk.NORMAL if not dbState else tk.DISABLED)
-        self.databaseMenu.entryconfig(1, state=tk.NORMAL if dbState else tk.DISABLED)
 
     def showConnectionDialog(self):
         # Create a connection dialog and show it
