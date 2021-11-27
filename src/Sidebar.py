@@ -20,13 +20,15 @@ class Sidebar(tk.Frame):
         # Create the sidebar body treeview
         self.body = ttk.Treeview(self, show='tree', selectmode='none')
         self.body.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        # Add double click event to the body treeview
+        self.body.bind('<Double-1>', self.onDoubleClick)
         # Add data to the treeview
-        self.body.insert('', tk.END, text='Tables', iid='tables', open=False)
-        self.body.insert('', tk.END, text='Views', iid='views', open=False)
+        self.body.insert('', tk.END, text='Tables', iid='TABLES', open=False)
+        self.body.insert('', tk.END, text='Views', iid='VIEWS', open=False)
         # Create the sidebar footer
         self.footer = tk.Label(self, bg='white')
         self.footer.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
-    
+
     def update(self, dbState):
         # Update the header
         self.header.config(
@@ -48,13 +50,24 @@ class Sidebar(tk.Frame):
         if dbState:
             # Add tables to the treeview
             for tableName in self.parent.db.getTables():
-                self.body.insert('tables', tk.END, text=tableName, iid=tableName, open=False)
+                tableIID = f'TABLE_{tableName}'
+                self.body.insert('TABLES', tk.END, text=tableName, iid=tableIID, open=False)
                 # Add table columns to the treeview
                 for columnName, dataType, dataLength in self.parent.db.getColumnData(tableName):
-                    self.body.insert(tableName, tk.END, text=columnName, open=False)
+                    self.body.insert(tableIID, tk.END, text=columnName, open=False)
             # Add views to the treeview
             for viewName in self.parent.db.getViews():
-                self.body.insert('views', tk.END, text=viewName, iid=viewName, open=False)
+                viewIID = f'VIEW_{viewName}'
+                self.body.insert('VIEWS', tk.END, text=viewName, iid=viewIID, open=False)
                 # Add view columns to the treeview
                 for columnName, dataType, dataLength in self.parent.db.getColumnData(viewName):
-                    self.body.insert(viewName, tk.END, text=columnName, open=False)
+                    self.body.insert(viewIID, tk.END, text=columnName, open=False)
+
+    def onDoubleClick(self, event):
+        item = self.body.identify('item', event.x, event.y)
+        # If the item is a table or view
+        if item.startswith('TABLE_') or item.startswith('VIEW_'):
+            # Get the table or view name
+            tableName = self.body.item(item, 'text')
+            # Open the table or view
+            self.parent.openTable(tableName, f'SELECT * FROM {tableName}', True)

@@ -1,8 +1,10 @@
 import tkinter as tk
 
-from MenuBar import MenuBar
-from Sidebar import Sidebar
 from ConnectionDialog import ConnectionDialog
+from MenuBar import MenuBar
+from Notebook import Notebook
+from Sidebar import Sidebar
+from Table import Table
 
 from OracleDatabase import OracleDatabase
 
@@ -20,6 +22,7 @@ class App(tk.Tk):
     def initializeApplication(self):
         self.initializeMainWindow()
         self.initializeSidebar()
+        self.initializeNotebook()
         self.updateUI()
 
     def initializeMainWindow(self):
@@ -36,6 +39,11 @@ class App(tk.Tk):
         self.sidebar = Sidebar(self, width=200, bg='white')
         self.sidebar.pack(side=tk.LEFT, fill=tk.Y)
 
+    def initializeNotebook(self):
+        # Create the notebook
+        self.notebook = Notebook(self)
+        self.notebook.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
     def updateUI(self, dbState=None):
         if dbState is None:
             dbState = self.db.isConnected
@@ -43,6 +51,21 @@ class App(tk.Tk):
         self.menuBar.updateMenuItems(dbState)
         # Update the sidebar
         self.sidebar.update(dbState)
+
+    def openTable(self, tableName, sqlQuery, editable=False):
+        # Execute the query
+        self.db.cursor.execute(sqlQuery)
+        # Get column names
+        columnNames = [column[0] for column in self.db.cursor.description]
+        # Get the data
+        data = self.db.cursor.fetchall()
+
+        # Create a new table tab
+        tableTab = Table(self.notebook, tableName, editable, data=data)
+        # Set column names
+        tableTab.headers(columnNames)
+        # Add the table tab to the notebook
+        self.notebook.addTab(tableName, tableTab)
 
     def showConnectionDialog(self):
         # Create a connection dialog and show it
