@@ -51,6 +51,8 @@ class App(tk.Tk):
         self.menuBar.updateMenuItems(dbState)
         # Update the sidebar
         self.sidebar.update(dbState)
+        # Update the notebook
+        self.notebook.update(dbState)
 
     def openTable(self, tableName, sqlQuery, editable=False):
         # Execute the query

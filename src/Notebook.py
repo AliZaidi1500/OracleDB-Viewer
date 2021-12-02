@@ -10,3 +10,8 @@ class Notebook(ttk.Notebook):
 
     def addTab(self, tabName, tab):
         self.add(tab, text=tabName)
+
+    def update(self, dbState):
+        if not dbState:
+            for item in self.winfo_children():
+                item.destroy()
