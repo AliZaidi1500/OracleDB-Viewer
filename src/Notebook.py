@@ -29,6 +29,13 @@ class Notebook(ttk.Notebook):
 
         self.parent = parent
 
+        # Initialize
+        self.initialize()
+
+    def initialize(self):
+        # Bind right click to close tab
+        self.bind('<Button-3>', self.onClick)
+
     def addTab(self, tabName, tab):
         self.add(tab, text=tabName)
 
@@ -50,3 +57,12 @@ class Notebook(ttk.Notebook):
         if not dbState:
             for item in self.winfo_children():
                 item.destroy()
+
+    def onClick(self, event):
+        # Get clicked tab
+        clickedTab = self.tk.call(self._w, 'identify', 'tab', event.x, event.y)
+        # Get selected tab
+        selectedTab = self.index(self.select())
+        # Close tab if selected tab is clicked
+        if clickedTab == selectedTab:
+            self.forget(clickedTab)
