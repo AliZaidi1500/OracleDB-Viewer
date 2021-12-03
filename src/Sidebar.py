@@ -21,6 +21,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter.messagebox import showerror
+
 
 class Sidebar(tk.Frame):
 
@@ -86,13 +88,17 @@ class Sidebar(tk.Frame):
 
     def onDoubleClick(self, event):
         item = self.body.identify('item', event.x, event.y)
+        itemType = item.split('_')[0]
         # If the item is a table or view
-        if item.startswith('TABLE_') or item.startswith('VIEW_'):
+        if itemType in ('TABLE', 'VIEW'):
             # Get the table or view name
             tableName = self.body.item(item, 'text')
             # Open the table or view if it is not already open
             if not self.parent.notebook.isOpen(tableName):
-                self.parent.openTable(tableName, f'SELECT * FROM {tableName}', True)
-            # Else, select the table or view
-            else:
-                self.parent.notebook.selectTab(tableName)
+                try:
+                    self.parent.openTable(tableName, f'SELECT * FROM {tableName}', True)
+                except Exception as e:
+                    showerror('Error', f'Error opening {itemType.lower()}:\n"{e}"')
+                    return
+            # Select the table or view
+            self.parent.notebook.selectTab(tableName)
