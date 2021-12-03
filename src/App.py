@@ -77,11 +77,9 @@ class App(tk.Tk):
 
     def openTable(self, tableName, sqlQuery, editable=False):
         # Execute the query
-        self.db.cursor.execute(sqlQuery)
+        data = self.db.execute(sqlQuery)
         # Get column names
         columnNames = [column[0] for column in self.db.cursor.description]
-        # Get the data
-        data = self.db.cursor.fetchall()
 
         # Create a new table tab
         tableTab = Table(self.notebook, tableName, editable, data=data)

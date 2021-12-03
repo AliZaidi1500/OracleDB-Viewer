@@ -53,6 +53,11 @@ class OracleDatabase:
         self.connection.close()
         self.connection = self.cursor = None
 
+    def execute(self, query):
+        # Execute the query
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
+
     def getTables(self):
         # Get the table names
         self.cursor.execute('SELECT table_name FROM user_tables')
@@ -65,5 +70,4 @@ class OracleDatabase:
 
     def getColumnData(self, table):
         # Get the table column names and data types
-        self.cursor.execute(f'SELECT column_name, data_type, data_length FROM user_tab_columns WHERE table_name = \'{table}\'')
-        return self.cursor.fetchall()
+        return self.execute(f'SELECT column_name, data_type, data_length FROM user_tab_columns WHERE table_name = \'{table}\'')
