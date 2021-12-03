@@ -90,5 +90,9 @@ class Sidebar(tk.Frame):
         if item.startswith('TABLE_') or item.startswith('VIEW_'):
             # Get the table or view name
             tableName = self.body.item(item, 'text')
-            # Open the table or view
-            self.parent.openTable(tableName, f'SELECT * FROM {tableName}', True)
+            # Open the table or view if it is not already open
+            if not self.parent.notebook.isOpen(tableName):
+                self.parent.openTable(tableName, f'SELECT * FROM {tableName}', True)
+            # Else, select the table or view
+            else:
+                self.parent.notebook.selectTab(tableName)

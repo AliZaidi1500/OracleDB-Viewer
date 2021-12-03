@@ -32,6 +32,20 @@ class Notebook(ttk.Notebook):
     def addTab(self, tabName, tab):
         self.add(tab, text=tabName)
 
+    def getTabID(self, tabName):
+        for tabID in self.tabs():
+            if self.tab(tabID, 'text') == tabName:
+                return tabID
+
+    def isOpen(self, tabName):
+        try:
+            return self.index(self.getTabID(tabName)) > -1
+        except:
+            return False
+
+    def selectTab(self, tabName):
+        self.select(self.getTabID(tabName))
+
     def update(self, dbState):
         if not dbState:
             for item in self.winfo_children():
