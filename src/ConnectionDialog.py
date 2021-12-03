@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import tkinter as tk
+from tkinter import ttk
 from tkinter.simpledialog import Dialog
 from tkinter.messagebox import showinfo, showerror
 
@@ -52,37 +53,37 @@ class ConnectionDialog(Dialog):
         # Add text entries
         container = tk.Frame(body)
         container.pack(fill='both', expand=True, padx=5, pady=5)
-        self.hostLabel = tk.Label(container, text='Host')
+        self.hostLabel = ttk.Label(container, text='Host')
         self.hostLabel.pack(side='top', anchor='nw')
-        self.hostEntry = tk.Entry(container, textvariable=self.host)
+        self.hostEntry = ttk.Entry(container, textvariable=self.host, width=40)
         self.hostEntry.pack(side='top')
 
         container = tk.Frame(body)
         container.pack(fill='both', expand=True, padx=5, pady=5)
-        self.portLabel = tk.Label(container, text='Port')
+        self.portLabel = ttk.Label(container, text='Port')
         self.portLabel.pack(side='top', anchor='nw')
-        self.portEntry = tk.Entry(container, textvariable=self.port)
+        self.portEntry = ttk.Entry(container, textvariable=self.port, width=40)
         self.portEntry.pack(side='top')
 
         container = tk.Frame(body)
         container.pack(fill='both', expand=True, padx=5, pady=5)
-        self.sidLabel = tk.Label(container, text='SID')
+        self.sidLabel = ttk.Label(container, text='SID')
         self.sidLabel.pack(side='top', anchor='nw')
-        self.sidEntry = tk.Entry(container, textvariable=self.sid)
+        self.sidEntry = ttk.Entry(container, textvariable=self.sid, width=40)
         self.sidEntry.pack(side='top')
 
         container = tk.Frame(body)
         container.pack(fill='both', expand=True, padx=5, pady=5)
-        self.usernameLabel = tk.Label(container, text='Username')
+        self.usernameLabel = ttk.Label(container, text='Username')
         self.usernameLabel.pack(side='top', anchor='nw')
-        self.usernameEntry = tk.Entry(container, textvariable=self.username)
+        self.usernameEntry = ttk.Entry(container, textvariable=self.username, width=40)
         self.usernameEntry.pack(side='top')
 
         container = tk.Frame(body)
         container.pack(fill='both', expand=True, padx=5, pady=5)
-        self.passwordLabel = tk.Label(container, text='Password')
+        self.passwordLabel = ttk.Label(container, text='Password')
         self.passwordLabel.pack(side='top', anchor='nw')
-        self.passwordEntry = tk.Entry(container, textvariable=self.password)
+        self.passwordEntry = ttk.Entry(container, show='*', textvariable=self.password, width=40)
         self.passwordEntry.pack(side='top')
 
         return super().body(master)
@@ -113,11 +114,11 @@ class ConnectionDialog(Dialog):
 
     def buttonbox(self):
         # Add connect button
-        self.connectBtn = tk.Button(self, text='Connect', width=10, state=tk.DISABLED, command=self.connectBtnHandler)
+        self.connectBtn = ttk.Button(self, text='Connect', width=10, state=tk.DISABLED, command=self.connectBtnHandler)
         self.connectBtn.pack(side='left', padx=5, pady=5)
 
         # Add cancel button
-        cancel_button = tk.Button(self, text='Cancel', width=10, command=self.destroy)
+        cancel_button = ttk.Button(self, text='Cancel', width=10, command=self.destroy)
         cancel_button.pack(side='right', padx=5, pady=5)
 
         # Bind keyboard events
